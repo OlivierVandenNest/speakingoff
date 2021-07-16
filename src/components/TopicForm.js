@@ -4,8 +4,7 @@ import Button from "react-bootstrap/Button";
 import { useState } from "react";
 import { v4 as uuid_v4 } from "uuid";
 
-const localBackend = "http://localhost:3001/addtopic";
-const backend = "https://speakingoff-backend.herokuapp.com/addtopic";
+const backend = process.env.BACKEND || "http://localhost:3001";
 
 const TopicForm = () => {
     const initialState = { topicname: "Enter topic name", duration: "Enter duration", topicowner: "Enter topic owner" };
@@ -27,7 +26,7 @@ const TopicForm = () => {
             createdDate: today
         };
 
-        fetch(localBackend, {
+        fetch(backend + "/addtopic", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
