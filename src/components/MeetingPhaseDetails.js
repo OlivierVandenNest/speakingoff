@@ -2,9 +2,9 @@ import MeetingPhaseDetail from "./MeetingPhaseDetail";
 import addButton from "../add_button.png";
 import Button from "react-bootstrap/Button";
 import TopicForm from "./TopicForm";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
-const backend = process.env.BACKEND || "http://localhost:3001";
+const backend = process.env.REACT_APP_BACKEND;
 
 const MeetingPhaseDetails = ({ meetingTopics }) => {
     const [creatingTopic, setCreatingTopic] = useState(false);

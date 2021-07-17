@@ -4,7 +4,7 @@ import Button from "react-bootstrap/Button";
 import { useState } from "react";
 import { v4 as uuid_v4 } from "uuid";
 
-const backend = process.env.BACKEND || "http://localhost:3001";
+const backend = process.env.REACT_APP_BACKEND;
 
 const TopicForm = () => {
     const initialState = { topicname: "Enter topic name", duration: "Enter duration", topicowner: "Enter topic owner" };

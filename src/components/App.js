@@ -7,12 +7,13 @@ import NavigationBar from "./NavigationBar";
 import MeetingProgressBar from "./MeetingProgressBar";
 import MeetingPhaseDetails from "./MeetingPhaseDetails";
 
-const backend = process.env.BACKEND || "http://localhost:3001";
+const backend = process.env.REACT_APP_BACKEND;
 
 function App() {
     const [meetingTopics, setMeetingTopics] = useState([]);
 
     useEffect(() => {
+        console.log(process.env);
         fetch(backend + "/topics", {
             method: "get",
             headers: {
