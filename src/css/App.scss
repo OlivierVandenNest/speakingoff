@@ -1,66 +1,71 @@
 h1 {
-  text-align: center;
+    text-align: center;
 }
 
 .meeting-progress-bar {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
 }
 
 .dot {
-  height: 33px;
-  width: 33px;
-  border-radius: 50%;
-  display: inline-block;
+    height: 33px;
+    width: 33px;
+    border-radius: 50%;
+    display: inline-block;
 }
 
 .meeting-detail-top {
-  display: flex;
+    display: flex;
 }
 
 .meeting-detail-title {
-  display: flex;
+    display: flex;
 }
 
 .meeting-detail-rightgroup {
-  margin-left: auto;
+    margin-left: auto;
 }
 
 .meeting-detail-mid {
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
 }
 
 .meeting-detail-progressbar {
-  width: 50%;
+    width: 50%;
 }
 
 .meeting-detail-invitees {
-  width: 10%;
-  display: flex;
-  justify-content: space-between;
+    width: 10%;
+    display: flex;
+    justify-content: space-between;
 }
 
 .meeting-detail-bottom {
-  display: flex;
+    display: flex;
 }
 
 .meeting-details {
-  display: flex;
-  flex-direction: column;
+    display: flex;
+    flex-direction: column;
 }
 
-.action-imgs>img {
-  height: 25px;
+.action-imgs > img {
+    height: 25px;
 }
 
 .add-button-image {
-  height: 70px;
+    height: 70px;
 }
 
 .button {
-  box-shadow: none !important;
+    box-shadow: none !important;
+}
+
+.homeactionlist {
+    display: flex;
+    flex-direction: column;
 }
