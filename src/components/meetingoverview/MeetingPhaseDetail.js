@@ -9,7 +9,7 @@ const MeetingPhaseDetail = ({ phaseName, duration, progress }) => {
     const [clicked, setClicked] = useState(false);
 
     return (
-        <div className="mt-4 p-3 block-example border border-success rounded mb-0" onClick={() => setClicked(!clicked)}>
+        <div className="mt-4 p-3 block-example border border-info rounded mb-0" onClick={() => setClicked(!clicked)}>
             <div className="meeting-detail-top">
                 <div className="meeting-detail-title">
                     <h2>{phaseName}</h2>
@@ -22,11 +22,11 @@ const MeetingPhaseDetail = ({ phaseName, duration, progress }) => {
                     </Button>
                 )}
                 {clicked && (
-                    <Button className="mr-2" variant="outline-success">
+                    <Button className="mr-2" variant="outline-info">
                         Remove Tag
                     </Button>
                 )}
-                <Button className={clicked ? "" : "meeting-detail-rightgroup"} variant={clicked ? "danger" : "success"}>
+                <Button className={clicked ? "" : "meeting-detail-rightgroup"} variant={clicked ? "danger" : "info"}>
                     {clicked ? "Hide" : "Show"}
                 </Button>
             </div>
