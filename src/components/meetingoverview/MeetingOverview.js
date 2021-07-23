@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
-import { requestMeeting, requestTopics, changeMeeting, changeTopics } from "../store/actions";
+import { requestMeeting, requestTopics, changeMeeting, changeTopics } from "../../store/actions";
+import MeetingLink from "./MeetingLink";
 import MeetingPhaseDetails from "./MeetingPhaseDetails.js";
 
 const mapStateToProps = (state) => {
@@ -57,36 +58,9 @@ function MeetingOverview({
         };
     }, []);
 
-    // const fetchTopics = () => {
-    //     fetch(`${backend}/meetings/${meeting.meetingName}/topics`, {
-    //         method: "get",
-    //         headers: {
-    //             Accept: "application/json",
-    //             "Content-Type": "application/json"
-    //         }
-    //     })
-    //         .then((response) => {
-    //             if (response.status === StatusCodes.OK) {
-    //                 return response.json();
-    //             } else {
-    //                 console.log(`bad response status when fetching topics: ${response.status}`);
-    //             }
-    //         })
-    //         .then((topics) => {
-    //             const topicList = [];
-    //             console.log(topics);
-    //             for (const [key, val] in topics) {
-    //                 console.log(key, val);
-    //                 topicList.push(val);
-    //             }
-    //             setMeetingTopics(topicList);
-    //             console.log(meetingTopics);
-    //         })
-    //         .catch((err) => console.log(`error from fetching topics: ${err}`));
-    // };
-
     return (
         <div className="MeetingOverview">
+            <MeetingLink />
             {/* <h1 className="mb-5">Coca Cola Product Meeting</h1>
             <MeetingProgressBar /> */}
             <MeetingPhaseDetails />

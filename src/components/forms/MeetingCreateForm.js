@@ -54,7 +54,7 @@ const MeetingCreateForm = () => {
                         </Form.Group>
                     </Row>
                     <Row className="justify-content-md-center">
-                        <Button variant="success" type="submit">
+                        <Button variant="info" type="submit">
                             Create
                         </Button>
                     </Row>

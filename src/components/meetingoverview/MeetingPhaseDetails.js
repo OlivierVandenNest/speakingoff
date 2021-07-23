@@ -1,10 +1,10 @@
 import MeetingPhaseDetail from "./MeetingPhaseDetail";
-import addButton from "../add_button.png";
+import addButton from "../../assets/add_button.png";
 import Button from "react-bootstrap/Button";
-import TopicForm from "./TopicForm";
+import TopicForm from "../forms/TopicForm";
 import { useState, useEffect } from "react";
 import { connect } from "react-redux";
-import { requestTopics } from "../store/actions";
+import { requestTopics } from "../../store/actions.js";
 
 const mapStateToProps = (state) => {
     return {
@@ -36,31 +36,6 @@ const MeetingPhaseDetails = ({ meeting, meetingTopics, onReloadTopics }) => {
         setCreatingTopic(!creatingTopic);
     };
 
-    // const fetchTopics = () => {
-    //     fetch(`${backend}/meetings/${meeting.meetingName}/topics`, {
-    //         method: "get",
-    //         headers: {
-    //             Accept: "application/json",
-    //             "Content-Type": "application/json"
-    //         }
-    //     })
-    //         .then((response) => {
-    //             if (response.status === StatusCodes.OK) {
-    //                 return response.json();
-    //             } else {
-    //                 console.log(`bad response status when fetching topics: ${response.status}`);
-    //             }
-    //         })
-    //         .then((topics) => {
-    //             var newTopicList = [];
-    //             for (const [_, value] of Object.entries(topics)) {
-    //                 newTopicList.push(value);
-    //             }
-    //             setTopicList(newTopicList);
-    //         })
-    //         .catch((err) => console.log(err));
-    // };
-
     return (
         <div className="px-5 meeting-details">
             {/* <MeetingPhaseDetail phaseName={"Product Design"} duration={"ongoing"} progress={50} />
@@ -77,7 +52,7 @@ const MeetingPhaseDetails = ({ meeting, meetingTopics, onReloadTopics }) => {
                 <img className="add-button-image" src={addButton} alt="add"></img>
             </Button>
             {creatingTopic && <TopicForm />}
-            <Button className="mt-5 mx-auto button" variant="success" onClick={() => onReloadTopics(meeting.meetingName)}>
+            <Button className="mt-5 mx-auto button" variant="info" onClick={() => onReloadTopics(meeting.meetingName)}>
                 Reload Topics
             </Button>
         </div>

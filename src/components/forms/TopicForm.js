@@ -4,7 +4,7 @@ import Button from "react-bootstrap/Button";
 import { useState } from "react";
 import { v4 as uuid_v4 } from "uuid";
 import { connect } from "react-redux";
-import { requestTopics } from "../store/actions";
+import { requestTopics } from "../../store/actions.js";
 
 const backend = process.env.REACT_APP_BACKEND;
 
@@ -74,7 +74,7 @@ const TopicForm = ({ meeting, onTopicsChange }) => {
                     <Form.Label>Topic Owner</Form.Label>
                     <Form.Control type="text" placeholder={initialState.topicowner} value={formValues.topicowner} />
                 </Form.Group>
-                <Button variant="success" type="submit">
+                <Button variant="info" type="submit">
                     Submit
                 </Button>
             </Form>
