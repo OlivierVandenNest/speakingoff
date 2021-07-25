@@ -1,5 +1,5 @@
-import MeetingPhaseDetail from "./MeetingPhaseDetail";
-import addButton from "../../assets/add_button.png";
+import TopicDetail from "./TopicDetail";
+import addButton from "../../assets/add_rounded_corners.svg";
 import Button from "react-bootstrap/Button";
 import TopicForm from "../forms/TopicForm";
 import { useState, useEffect } from "react";
@@ -21,7 +21,7 @@ const mapDispatchToProps = (dispatch) => {
     };
 };
 
-const MeetingPhaseDetails = ({ meeting, meetingTopics, onReloadTopics }) => {
+const TopicList = ({ meeting, meetingTopics, onReloadTopics }) => {
     // State specific to this component
     const [creatingTopic, setCreatingTopic] = useState(false);
     const [topicList, setTopicList] = useState([]);
@@ -38,14 +38,10 @@ const MeetingPhaseDetails = ({ meeting, meetingTopics, onReloadTopics }) => {
 
     return (
         <div className="px-5 meeting-details">
-            {/* <MeetingPhaseDetail phaseName={"Product Design"} duration={"ongoing"} progress={50} />
-            <MeetingPhaseDetail phaseName={"Marketing"} duration={"15 min"} progress={0} />
-            <MeetingPhaseDetail phaseName={"Sales"} duration={"45 min"} progress={0} />
-            <MeetingPhaseDetail phaseName={"Legal"} duration={"1h 15min"} progress={0} /> */}
             <div>
                 {topicList.map((topic) => {
                     console.log(topic);
-                    return <MeetingPhaseDetail key={topic.topicId} phaseName={topic.topicName} duration={topic.duration} progress={0} />;
+                    return <TopicDetail key={topic.topicId} topicName={topic.topicName} duration={topic.duration} progress={0} />;
                 })}
             </div>
             <Button className="mt-5 button" variant="white" onClick={createTopic}>
@@ -59,4 +55,4 @@ const MeetingPhaseDetails = ({ meeting, meetingTopics, onReloadTopics }) => {
     );
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(MeetingPhaseDetails);
+export default connect(mapStateToProps, mapDispatchToProps)(TopicList);

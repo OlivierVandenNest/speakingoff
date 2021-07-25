@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import { requestMeeting, requestTopics, changeMeeting, changeTopics } from "../../store/actions";
 import MeetingLink from "./MeetingLink";
-import MeetingPhaseDetails from "./MeetingPhaseDetails.js";
+import TopicList from "./TopicList.js";
 
 const mapStateToProps = (state) => {
     return {
@@ -63,7 +63,7 @@ function MeetingOverview({
             <MeetingLink />
             {/* <h1 className="mb-5">Coca Cola Product Meeting</h1>
             <MeetingProgressBar /> */}
-            <MeetingPhaseDetails />
+            <TopicList />
         </div>
     );
 }

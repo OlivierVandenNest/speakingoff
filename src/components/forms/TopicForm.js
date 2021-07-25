@@ -1,6 +1,5 @@
 import React from "react";
-import Form from "react-bootstrap/Form";
-import Button from "react-bootstrap/Button";
+import { Row, Container, Form, Button, Col } from "react-bootstrap";
 import { useState } from "react";
 import { v4 as uuid_v4 } from "uuid";
 import { connect } from "react-redux";
@@ -62,21 +61,29 @@ const TopicForm = ({ meeting, onTopicsChange }) => {
     return (
         <div className="mx-auto mt-5">
             <Form onSubmit={handleSubmit}>
-                <Form.Group className="mb-3" controlId="topicname">
-                    <Form.Label>Topic Name</Form.Label>
-                    <Form.Control type="text" placeholder={initialState.topicname} value={formValues.topicname} />
-                </Form.Group>
-                <Form.Group className="mb-3" controlId="topicduration">
-                    <Form.Label>Duration</Form.Label>
-                    <Form.Control type="text" placeholder={initialState.duration} value={formValues.duration} />
-                </Form.Group>
-                <Form.Group className="mb-3" controlId="topicowner">
-                    <Form.Label>Topic Owner</Form.Label>
-                    <Form.Control type="text" placeholder={initialState.topicowner} value={formValues.topicowner} />
-                </Form.Group>
-                <Button variant="info" type="submit">
-                    Submit
-                </Button>
+                <Container>
+                    <Row>
+                        <Col>
+                            <Form.Group className="mb-3" controlId="topicname">
+                                <Form.Label>Topic Name</Form.Label>
+                                <Form.Control type="text" placeholder={initialState.topicname} value={formValues.topicname} />
+                            </Form.Group>
+                            <Form.Group className="mb-3" controlId="topicduration">
+                                <Form.Label>Duration</Form.Label>
+                                <Form.Control type="text" placeholder={initialState.duration} value={formValues.duration} />
+                            </Form.Group>
+                            <Form.Group className="mb-3" controlId="topicowner">
+                                <Form.Label>Topic Owner</Form.Label>
+                                <Form.Control type="text" placeholder={initialState.topicowner} value={formValues.topicowner} />
+                            </Form.Group>
+                        </Col>
+                    </Row>
+                    <Row className="justify-content-md-center">
+                        <Button variant="info" type="submit">
+                            Submit
+                        </Button>
+                    </Row>
+                </Container>
             </Form>
         </div>
     );
