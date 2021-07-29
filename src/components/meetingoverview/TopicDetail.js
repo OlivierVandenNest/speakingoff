@@ -9,7 +9,7 @@ import collapse from "../../assets/collapse_rounded.svg";
 
 import { useState } from "react";
 import { connect } from "react-redux";
-import { requestMeeting } from "../../store/actions";
+import { requestMeeting, requestTopics } from "../../store/actions";
 
 const backend = process.env.REACT_APP_BACKEND;
 
@@ -24,11 +24,14 @@ const mapDispatchToProps = (dispatch) => {
     return {
         onMeetingRequest: (meetingName) => {
             dispatch(requestMeeting(meetingName));
+        },
+        onTopicsRequest: (meetingName) => {
+            dispatch(requestTopics(meetingName));
         }
     };
 };
 
-const TopicDetail = ({ topicName, duration, progress, meeting, topics, onMeetingRequest }) => {
+const TopicDetail = ({ topicName, duration, progress, meeting, topics, onMeetingRequest, onTopicsRequest }) => {
     const [clicked, setClicked] = useState(false);
     const [finished, setFinished] = useState(topics[topicName].isFinished);
 
@@ -42,6 +45,7 @@ const TopicDetail = ({ topicName, duration, progress, meeting, topics, onMeeting
         setFinished(!finished);
         updateFinishedTopic(topics[topicName]);
         onMeetingRequest(meeting.meetingName);
+        onTopicsRequest(meeting.meetingName);
     };
 
     const updateFinishedTopic = (topic) => {
