@@ -40,14 +40,13 @@ const TopicList = ({ meeting, meetingTopics, onReloadTopics }) => {
         <div className="px-5 meeting-details">
             <div>
                 {topicList.map((topic) => {
-                    console.log(topic);
                     return <TopicDetail key={topic.topicId} topicName={topic.topicName} duration={topic.duration} progress={0} />;
                 })}
             </div>
+            {creatingTopic && <TopicForm />}
             <Button className="mt-5 button" variant="white" onClick={createTopic}>
                 <img className="add-button-image" src={addButton} alt="add"></img>
             </Button>
-            {creatingTopic && <TopicForm />}
             <Button className="mt-5 mx-auto button" variant="info" onClick={() => onReloadTopics(meeting.meetingName)}>
                 Reload Topics
             </Button>

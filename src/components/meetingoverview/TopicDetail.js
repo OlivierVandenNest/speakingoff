@@ -9,6 +9,7 @@ import collapse from "../../assets/collapse_rounded.svg";
 
 import { useState } from "react";
 import { connect } from "react-redux";
+import { requestMeeting } from "../../store/actions";
 
 const backend = process.env.REACT_APP_BACKEND;
 
@@ -19,13 +20,20 @@ const mapStateToProps = (state) => {
     };
 };
 
-const TopicDetail = ({ topicName, duration, progress, meeting, topics }) => {
+const mapDispatchToProps = (dispatch) => {
+    return {
+        onMeetingRequest: (meetingName) => {
+            dispatch(requestMeeting(meetingName));
+        }
+    };
+};
+
+const TopicDetail = ({ topicName, duration, progress, meeting, topics, onMeetingRequest }) => {
     const [clicked, setClicked] = useState(false);
     const [finished, setFinished] = useState(topics[topicName].isFinished);
 
     const handleToggle = (e) => {
         e.stopPropagation();
-        console.log(e);
         setClicked(!clicked);
     };
 
@@ -33,6 +41,7 @@ const TopicDetail = ({ topicName, duration, progress, meeting, topics }) => {
         e.stopPropagation();
         setFinished(!finished);
         updateFinishedTopic(topics[topicName]);
+        onMeetingRequest(meeting.meetingName);
     };
 
     const updateFinishedTopic = (topic) => {
@@ -47,14 +56,13 @@ const TopicDetail = ({ topicName, duration, progress, meeting, topics }) => {
     };
 
     return (
-        <div className="mt-4 p-3 block-example border border-info rounded mb-0" onClick={handleToggle}>
+        <div className={`mt-4 p-3 block-example border border-info rounded mb-0 ${topics[topicName].isFinished ? "topicfinished" : ""}`} onClick={handleToggle}>
             <div className="meeting-detail-top">
                 <div className="meeting-detail-title">
                     <h2>{topicName}</h2>
                     {clicked && <h3 className="ml-3 font-weight-light">{duration}</h3>}
                 </div>
-
-                {clicked && (
+                {/* {clicked && (
                     <Button className="meeting-detail-rightgroup mr-2" variant="info">
                         Add Tag
                     </Button>
@@ -63,31 +71,32 @@ const TopicDetail = ({ topicName, duration, progress, meeting, topics }) => {
                     <Button className="mr-2" variant="outline-info">
                         Remove Tag
                     </Button>
-                )}
-                <Button className={`button ${clicked ? "" : "meeting-detail-rightgroup"}`} variant="white">
+                )} */}
+                {/* When tag buttons are uncommented, use className={`button ${clicked ? "" : "meeting-detail-rightgroup"}`} */}
+                <Button className={`button ${clicked ? "meeting-detail-rightgroup" : "meeting-detail-rightgroup"}`} variant="white">
                     <img src={clicked ? collapse : expand} alt="expand" className="expandcollapseimg" />
                 </Button>
             </div>
             {clicked && (
                 <div className="mt-3 meeting-detail-mid">
                     <ProgressBar className="meeting-detail-progressbar" animated now={finished ? 100 : progress} variant="info" />
-                    <div className="meeting-detail-invitees">
+                    {/* <div className="meeting-detail-invitees">
                         <MeetingInvitee />
                         <MeetingInvitee />
                         <MeetingInvitee />
                         <MeetingInvitee />
-                    </div>
+                    </div> */}
                 </div>
             )}
             {clicked && (
-                <div className="meeting-detail-bottom">
+                <div className="mt-3 meeting-detail-bottom">
                     <h5 className="font-weight-bolder">ADD CONCLUSION:</h5>
                     <div className="ml-3 action-imgs">
                         <img src={micLogo} alt="mic" />
                         <img className="ml-3" src={textLogo} alt="text" />
                     </div>
                     <div className="ml-auto mr-3 finishbox">
-                        <h5 className="font-weight-bolder my-auto">{finished ? "RESUME" : "FINISH"}</h5>
+                        <h5 className="font-weight-bolder my-auto">{finished ? "FINISHED" : "FINISH"}</h5>
                         <Button className="button" type="checkbox" variant="white" onClick={handleFinish}>
                             <img src={finished ? circlechecked : circle} alt="finish" className="finishtopicsvg" />
                         </Button>
@@ -98,4 +107,4 @@ const TopicDetail = ({ topicName, duration, progress, meeting, topics }) => {
     );
 };
 
-export default connect(mapStateToProps, {})(TopicDetail);
+export default connect(mapStateToProps, mapDispatchToProps)(TopicDetail);

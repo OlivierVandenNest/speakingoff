@@ -3,6 +3,8 @@ import { connect } from "react-redux";
 import { requestMeeting, requestTopics, changeMeeting, changeTopics } from "../../store/actions";
 import MeetingLink from "./MeetingLink";
 import TopicList from "./TopicList.js";
+import MeetingProgressBar from "./MeetingProgressBar";
+import _ from "lodash";
 
 const mapStateToProps = (state) => {
     return {
@@ -61,8 +63,7 @@ function MeetingOverview({
     return (
         <div className="MeetingOverview">
             <MeetingLink />
-            {/* <h1 className="mb-5">Coca Cola Product Meeting</h1>
-            <MeetingProgressBar /> */}
+            {(meeting.progress > 0 || !_.isEmpty(meeting.meetingTopics)) && <MeetingProgressBar />}
             <TopicList />
         </div>
     );

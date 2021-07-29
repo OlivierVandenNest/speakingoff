@@ -90,3 +90,22 @@ h1 {
 .finishbox {
     display: flex;
 }
+
+.topicfinished {
+    background-color: #90f0ff;
+}
+
+.topicform-top {
+    display: flex;
+    flex-direction: row;
+}
+
+.duration-group {
+    display: flex;
+    flex-direction: row;
+}
+
+.topicform-bot {
+    display: flex;
+    flex-direction: row;
+}
