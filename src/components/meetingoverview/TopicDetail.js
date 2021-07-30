@@ -44,8 +44,6 @@ const TopicDetail = ({ topicName, duration, progress, meeting, topics, onMeeting
         e.stopPropagation();
         setFinished(!finished);
         updateFinishedTopic(topics[topicName]);
-        onMeetingRequest(meeting.meetingName);
-        onTopicsRequest(meeting.meetingName);
     };
 
     const updateFinishedTopic = (topic) => {
@@ -56,7 +54,31 @@ const TopicDetail = ({ topicName, duration, progress, meeting, topics, onMeeting
                 "Content-Type": "application/json"
             },
             body: JSON.stringify(topic)
-        }).catch((err) => console.log(`error when updating finished topic: ${err}`));
+        })
+        .then(() => onMeetingRequest(meeting.meetingName))
+        .then(() => onTopicsRequest(meeting.meetingName))
+        .catch((err) => console.log(`error when updating finished topic: ${err}`));
+    };
+    
+    const checkEnabled = (topicName) => {
+    	let before = true;
+    	for (let topic in topics) {
+    	    console.log(topics[topic].isFinished);
+    	    if (before) {
+    	    	if (topics[topic].topicName === topicName) {
+    	    	    before = false;
+    	    	} else {
+    	    	    if (!topics[topic].isFinished) {
+    	    	        return true;
+    	    	    }
+    	    	}  
+    	    } else {
+    	        if (topics[topic].isFinished) {
+    	            return true;
+    	        }
+    	    }
+    	}
+    	return false;	
     };
 
     return (
@@ -101,7 +123,7 @@ const TopicDetail = ({ topicName, duration, progress, meeting, topics, onMeeting
                     </div>
                     <div className="ml-auto mr-3 finishbox">
                         <h5 className="font-weight-bolder my-auto">{finished ? "FINISHED" : "FINISH"}</h5>
-                        <Button className="button" type="checkbox" variant="white" onClick={handleFinish}>
+                        <Button className="button" type="checkbox" variant="white" onClick={handleFinish} disabled={checkEnabled(topicName)}>
                             <img src={finished ? circlechecked : circle} alt="finish" className="finishtopicsvg" />
                         </Button>
                     </div>
