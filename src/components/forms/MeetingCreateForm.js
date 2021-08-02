@@ -24,7 +24,8 @@ const MeetingCreateForm = () => {
             meetingId: uuid_v4(),
             meetingName: event.target[0].value,
             createdDate: today,
-            meetingTopics: {}
+            meetingTopics: {},
+            status: 'preparation'
         };
 
         fetch(`${backend}/addmeeting`, {

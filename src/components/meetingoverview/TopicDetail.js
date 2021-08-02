@@ -103,7 +103,7 @@ const TopicDetail = ({ topicName, duration, progress, meeting, topics, onMeeting
                     <img src={clicked ? collapse : expand} alt="expand" className="expandcollapseimg" />
                 </Button>
             </div>
-            {clicked && (
+            {(clicked && meeting.status === 'started')&& (
                 <div className="mt-3 meeting-detail-mid">
                     <ProgressBar className="meeting-detail-progressbar" animated now={finished ? 100 : progress} variant="info" />
                     {/* <div className="meeting-detail-invitees">
@@ -114,19 +114,19 @@ const TopicDetail = ({ topicName, duration, progress, meeting, topics, onMeeting
                     </div> */}
                 </div>
             )}
-            {clicked && (
+            {(clicked && meeting.status === 'started') && (
                 <div className="mt-3 meeting-detail-bottom">
                     <h5 className="font-weight-bolder">ADD CONCLUSION:</h5>
                     <div className="ml-3 action-imgs">
                         <img src={micLogo} alt="mic" />
                         <img className="ml-3" src={textLogo} alt="text" />
                     </div>
-                    <div className="ml-auto mr-3 finishbox">
-                        <h5 className="font-weight-bolder my-auto">{finished ? "FINISHED" : "FINISH"}</h5>
-                        <Button className="button" type="checkbox" variant="white" onClick={handleFinish} disabled={checkEnabled(topicName)}>
-                            <img src={finished ? circlechecked : circle} alt="finish" className="finishtopicsvg" />
-                        </Button>
-                    </div>
+                	<div className="ml-auto mr-3 finishbox">
+                    	<h5 className="font-weight-bolder my-auto">{finished ? "FINISHED" : "FINISH"}</h5>
+	                    <Button className="button" type="checkbox" variant="white" onClick={handleFinish} disabled={checkEnabled(topicName)}>
+	                        <img src={finished ? circlechecked : circle} alt="finish" className="finishtopicsvg" />
+	                    </Button>
+	                </div>
                 </div>
             )}
         </div>

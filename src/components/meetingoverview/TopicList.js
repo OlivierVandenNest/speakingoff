@@ -44,12 +44,11 @@ const TopicList = ({ meeting, meetingTopics, onReloadTopics }) => {
                 })}
             </div>
             {creatingTopic && <TopicForm />}
-            <Button className="mt-5 button" variant="white" onClick={createTopic}>
-                <img className="add-button-image" src={addButton} alt="add"></img>
-            </Button>
-            <Button className="mt-5 mx-auto button" variant="info" onClick={() => onReloadTopics(meeting.meetingName)}>
-                Reload Topics
-            </Button>
+            {meeting.status === 'preparation' && (
+		        <Button className="mt-5 button" variant="white" onClick={createTopic}>
+		            <img className="add-button-image" src={addButton} alt="add"></img>
+		        </Button>
+		    )}
         </div>
     );
 };

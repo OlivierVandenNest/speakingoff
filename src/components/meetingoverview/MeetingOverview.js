@@ -1,10 +1,11 @@
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
-import { requestMeeting, requestTopics, changeMeeting, changeTopics } from "../../store/actions";
+import { requestMeeting, requestTopics, changeMeeting, changeTopics, startMeeting, finishMeeting } from "../../store/actions";
 import MeetingLink from "./MeetingLink";
 import TopicList from "./TopicList.js";
 import MeetingProgressBar from "./MeetingProgressBar";
 import _ from "lodash";
+import Button from "react-bootstrap/Button";
 
 const mapStateToProps = (state) => {
     return {
@@ -30,6 +31,12 @@ const mapDispatchToProps = (dispatch) => {
         },
         onTopicsChange: (topics) => {
             dispatch(changeTopics(topics));
+        },
+        onMeetingStart: (meetingName) => {
+        	dispatch(startMeeting(meetingName));
+        },
+        onMeetingFinish: (meetingName) => {
+        	dispatch(finishMeeting(meetingName));
         }
     };
 };
@@ -47,7 +54,9 @@ function MeetingOverview({
     topicsError,
     onTopicsRequest,
     onMeetingChange,
-    onTopicsChange
+    onTopicsChange,
+    onMeetingStart,
+    onMeetingFinish
 }) {
     useEffect(() => {
         console.log(`meeting name: ${match.params.meetingName}`);
@@ -59,12 +68,47 @@ function MeetingOverview({
             onTopicsChange({});
         };
     }, []);
+    
+    const handleStart = (e) => {
+    	onMeetingStart(meeting.meetingName);
+    };
+    
+    const handleFinish = (e) => {
+    	onMeetingFinish(meeting.meetingName);
+    };
 
     return (
         <div className="MeetingOverview">
-            <MeetingLink />
-            {(meeting.progress > 0 || !_.isEmpty(meeting.meetingTopics)) && <MeetingProgressBar />}
-            <TopicList />
+            {meeting.status === 'preparation' && (
+            	<div>
+		        	<MeetingLink />
+		        	<TopicList />
+		        	<div className="meeting-start">
+				        <Button className="mt-5 mx-auto button" variant="info" onClick={handleStart}>
+				            Start Meeting!
+				        </Button>
+				    </div>
+				</div>
+            )}
+            {meeting.status === 'started' && (
+            	<div>
+            		<MeetingLink />
+		        	<div>
+		        		{(meeting.progress > 0 || !_.isEmpty(meeting.meetingTopics)) && <MeetingProgressBar />}
+		        	</div>
+		        	<TopicList />
+			    	<div className="meeting-finish">
+					    <Button className="mt-5 mx-auto button" variant="info" onClick={handleFinish}>
+					        End Meeting!
+					    </Button>
+					</div>
+				</div>
+            )}
+            {meeting.status === 'finished' && (
+            	<div>
+            		This meeting has ended. In the future, there will be an option to download the meeting report here.
+            	</div>
+            )}
         </div>
     );
 }
