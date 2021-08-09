@@ -1,7 +1,6 @@
 import React from "react";
 import { Form, Button, Container, Row } from "react-bootstrap";
 import { useState } from "react";
-import { v4 as uuid_v4 } from "uuid";
 import { useHistory } from "react-router";
 
 const backend = process.env.REACT_APP_BACKEND;
@@ -13,21 +12,12 @@ const MeetingCreateForm = () => {
 
     const handleCreateSubmit = (event) => {
         event.preventDefault();
-        var today = new Date();
-        var dd = String(today.getDate()).padStart(2, "0");
-        var mm = String(today.getMonth() + 1).padStart(2, "0"); //January is 0!
-        var yyyy = today.getFullYear();
-
-        today = mm + "/" + dd + "/" + yyyy;
 
         const meeting = {
-            meetingId: uuid_v4(),
-            meetingName: event.target[0].value,
-            createdDate: today,
-            meetingTopics: {}
+            meetingName: event.target[0].value
         };
 
-        fetch(`${backend}/addmeeting`, {
+        fetch(`${backend}/meetings/addmeeting`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"

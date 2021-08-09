@@ -1,4 +1,5 @@
 import { Button, ProgressBar } from "react-bootstrap";
+import Spinner from "react-bootstrap/Spinner";
 import MeetingInvitee from "./MeetingInvitee";
 import micLogo from "../../assets/mic_logo.png";
 import textLogo from "../../assets/text-logo.png";
@@ -9,14 +10,14 @@ import collapse from "../../assets/collapse_rounded.svg";
 
 import { useState } from "react";
 import { connect } from "react-redux";
-import { requestMeeting, requestTopics } from "../../store/actions";
+import { requestMeeting } from "../../store/actions";
 
 const backend = process.env.REACT_APP_BACKEND;
 
 const mapStateToProps = (state) => {
     return {
         meeting: state.requestMeeting.meeting,
-        topics: state.requestTopics.topics
+        isMeetingPending: state.requestMeeting.isMeetingPending
     };
 };
 
@@ -24,16 +25,14 @@ const mapDispatchToProps = (dispatch) => {
     return {
         onMeetingRequest: (meetingName) => {
             dispatch(requestMeeting(meetingName));
-        },
-        onTopicsRequest: (meetingName) => {
-            dispatch(requestTopics(meetingName));
         }
     };
 };
 
-const TopicDetail = ({ topicName, duration, progress, meeting, topics, onMeetingRequest, onTopicsRequest }) => {
+const TopicDetail = ({ topicName, duration, progress, meeting, isMeetingPending, onMeetingRequest }) => {
     const [clicked, setClicked] = useState(false);
-    const [finished, setFinished] = useState(topics[topicName].isFinished);
+    const [topic, setTopic] = useState(meeting.meetingTopicsMap.get(topicName).topicInputDTO);
+    const [finished, setFinished] = useState(topic.isFinished);
 
     const handleToggle = (e) => {
         e.stopPropagation();
@@ -43,46 +42,44 @@ const TopicDetail = ({ topicName, duration, progress, meeting, topics, onMeeting
     const handleFinish = (e) => {
         e.stopPropagation();
         setFinished(!finished);
-        updateFinishedTopic(topics[topicName]);
+        updateFinishedTopic(topic);
     };
 
     const updateFinishedTopic = (topic) => {
         topic.isFinished = !topic.isFinished;
-        fetch(`${backend}/updatetopic`, {
+        fetch(`${backend}/meetings/updatetopic`, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify(topic)
         })
-        .then(() => onMeetingRequest(meeting.meetingName))
-        .then(() => onTopicsRequest(meeting.meetingName))
-        .catch((err) => console.log(`error when updating finished topic: ${err}`));
-    };
-    
-    const checkEnabled = (topicName) => {
-    	let before = true;
-    	for (let topic in topics) {
-    	    console.log(topics[topic].isFinished);
-    	    if (before) {
-    	    	if (topics[topic].topicName === topicName) {
-    	    	    before = false;
-    	    	} else {
-    	    	    if (!topics[topic].isFinished) {
-    	    	        return true;
-    	    	    }
-    	    	}  
-    	    } else {
-    	        if (topics[topic].isFinished) {
-    	            return true;
-    	        }
-    	    }
-    	}
-    	return false;	
+            .then(() => onMeetingRequest(meeting.meetingName))
+            .catch((err) => console.log(`error when updating finished topic: ${err}`));
     };
 
+    // const checkEnabled = (topicName) => {
+    //     let before = true;
+    //     for (let topic in topics) {
+    //         if (before) {
+    //             if (topics[topic].topicName === topicName) {
+    //                 before = false;
+    //             } else {
+    //                 if (!topics[topic].isFinished) {
+    //                     return true;
+    //                 }
+    //             }
+    //         } else {
+    //             if (topics[topic].isFinished) {
+    //                 return true;
+    //             }
+    //         }
+    //     }
+    //     return false;
+    // };
+
     return (
-        <div className={`mt-4 p-3 block-example border border-info rounded mb-0 ${topics[topicName].isFinished ? "topicfinished" : ""}`} onClick={handleToggle}>
+        <div className={`mt-4 p-3 block-example border border-info rounded mb-0 ${topic.isFinished ? "topicfinished" : ""}`} onClick={handleToggle}>
             <div className="meeting-detail-top">
                 <div className="meeting-detail-title">
                     <h2>{topicName}</h2>
@@ -123,9 +120,15 @@ const TopicDetail = ({ topicName, duration, progress, meeting, topics, onMeeting
                     </div>
                     <div className="ml-auto mr-3 finishbox">
                         <h5 className="font-weight-bolder my-auto">{finished ? "FINISHED" : "FINISH"}</h5>
-                        <Button className="button" type="checkbox" variant="white" onClick={handleFinish} disabled={checkEnabled(topicName)}>
-                            <img src={finished ? circlechecked : circle} alt="finish" className="finishtopicsvg" />
-                        </Button>
+                        {isMeetingPending ? (
+                            <Spinner animation="border" role="status" variant="primary">
+                                <span className="visually-hidden">Loading...</span>
+                            </Spinner>
+                        ) : (
+                            <Button className="button" type="checkbox" variant="white" onClick={handleFinish}>
+                                <img src={finished ? circlechecked : circle} alt="finish" className="finishtopicsvg" />
+                            </Button>
+                        )}
                     </div>
                 </div>
             )}

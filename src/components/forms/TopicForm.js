@@ -1,9 +1,8 @@
 import React from "react";
-import { Row, Container, Form, Button, Col } from "react-bootstrap";
+import { Row, Form, Button, Col } from "react-bootstrap";
 import { useState } from "react";
-import { v4 as uuid_v4 } from "uuid";
 import { connect } from "react-redux";
-import { requestMeeting, requestTopics } from "../../store/actions.js";
+import { requestMeeting } from "../../store/actions.js";
 import expand from "../../assets/expand_rounded.svg";
 import collapse from "../../assets/collapse_rounded.svg";
 import _ from "lodash";
@@ -20,16 +19,12 @@ const mapDispatchToProps = (dispatch) => {
     return {
         onMeetingChange: (meetingName) => {
             dispatch(requestMeeting(meetingName));
-        },
-        onTopicsChange: (meetingName) => {
-            dispatch(requestTopics(meetingName));
         }
     };
 };
 
 const TopicForm = ({ meeting, onMeetingChange, onTopicsChange }) => {
     const [clicked, setClicked] = useState(true);
-    const [formValues, setFormValues] = useState({});
 
     const initialState = { topicname: "Enter topic name", description: "Enter description (optional)" };
 
@@ -41,27 +36,18 @@ const TopicForm = ({ meeting, onMeetingChange, onTopicsChange }) => {
     const handleSubmit = (event) => {
         console.log(event);
         event.preventDefault();
-        var today = new Date();
-        var dd = String(today.getDate()).padStart(2, "0");
-        var mm = String(today.getMonth() + 1).padStart(2, "0"); //January is 0!
-        var yyyy = today.getFullYear();
-
-        today = mm + "/" + dd + "/" + yyyy;
 
         let hourMinutes = _.isEmpty(event.target[1].value) ? 0 : parseInt(event.target[1].value);
         let minutes = _.isEmpty(event.target[2].value) ? 0 : parseInt(event.target[2].value);
 
         const topic = {
-            topicId: uuid_v4(),
             topicName: event.target[0].value,
             duration: hourMinutes * 60 + minutes,
             topicDescription: event.target[3].value,
-            createdDate: today,
-            meetingName: meeting.meetingName,
-            isFinished: false
+            meetingName: meeting.meetingName
         };
 
-        fetch(`${backend}/addtopic`, {
+        fetch(`${backend}/meetings/addtopic`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -69,9 +55,7 @@ const TopicForm = ({ meeting, onMeetingChange, onTopicsChange }) => {
             body: JSON.stringify(topic)
         })
             .then(() => {
-                setFormValues({});
                 onMeetingChange(meeting.meetingName);
-                onTopicsChange(meeting.meetingName);
             })
             .catch((err) => console.log(`error from backend: ${err}`));
     };
