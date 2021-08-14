@@ -8,7 +8,6 @@ const backend = process.env.REACT_APP_BACKEND;
 const MeetingCreateForm = () => {
     const history = useHistory();
     const initialState = { meetingname: "Enter meeting name" };
-    const [formValues, setFormValues] = useState(initialState);
 
     const handleCreateSubmit = (event) => {
         event.preventDefault();
@@ -25,7 +24,6 @@ const MeetingCreateForm = () => {
             body: JSON.stringify(meeting)
         })
             .then(() => {
-                setFormValues(initialState);
                 history.push(`/meeting/${meeting.meetingName}`);
             })
             .catch((err) => {
@@ -40,7 +38,7 @@ const MeetingCreateForm = () => {
                 <Container>
                     <Row className="justify-content-md-center">
                         <Form.Group className="mb-3" controlId="meetingname">
-                            <Form.Control type="text" placeholder={formValues.meetingname} />
+                            <Form.Control type="text" placeholder={initialState.meetingname} />
                         </Form.Group>
                     </Row>
                     <Row className="justify-content-md-center">

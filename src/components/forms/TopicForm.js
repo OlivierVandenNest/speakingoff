@@ -11,7 +11,7 @@ const backend = process.env.REACT_APP_BACKEND;
 
 const mapStateToProps = (state) => {
     return {
-        meeting: state.requestMeeting.meeting
+        serverResponse: state.requestMeeting.meeting
     };
 };
 
@@ -23,7 +23,7 @@ const mapDispatchToProps = (dispatch) => {
     };
 };
 
-const TopicForm = ({ meeting, onMeetingChange, onTopicsChange }) => {
+const TopicForm = ({ serverResponse, onMeetingChange }) => {
     const [clicked, setClicked] = useState(true);
 
     const initialState = { topicname: "Enter topic name", description: "Enter description (optional)" };
@@ -34,7 +34,6 @@ const TopicForm = ({ meeting, onMeetingChange, onTopicsChange }) => {
     };
 
     const handleSubmit = (event) => {
-        console.log(event);
         event.preventDefault();
 
         let hourMinutes = _.isEmpty(event.target[1].value) ? 0 : parseInt(event.target[1].value);
@@ -43,8 +42,8 @@ const TopicForm = ({ meeting, onMeetingChange, onTopicsChange }) => {
         const topic = {
             topicName: event.target[0].value,
             duration: hourMinutes * 60 + minutes,
-            topicDescription: event.target[3].value,
-            meetingName: meeting.meetingName
+            topicDescription: event.target[4].value,
+            meetingName: serverResponse.meeting.meetingInputDTO.meetingName
         };
 
         fetch(`${backend}/meetings/addtopic`, {
@@ -55,7 +54,7 @@ const TopicForm = ({ meeting, onMeetingChange, onTopicsChange }) => {
             body: JSON.stringify(topic)
         })
             .then(() => {
-                onMeetingChange(meeting.meetingName);
+                onMeetingChange(serverResponse.meeting.meetingInputDTO.meetingName);
             })
             .catch((err) => console.log(`error from backend: ${err}`));
     };

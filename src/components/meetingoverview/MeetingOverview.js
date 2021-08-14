@@ -9,7 +9,7 @@ import _ from "lodash";
 
 const mapStateToProps = (state) => {
     return {
-        meeting: state.requestMeeting.meeting,
+        serverResponse: state.requestMeeting.meeting,
         isMeetingPending: state.requestMeeting.isMeetingPending,
         meetingError: state.requestMeeting.error
     };
@@ -28,7 +28,7 @@ const mapDispatchToProps = (dispatch) => {
 
 // Access to 'match' object since the MeetingOverview React component is used in a Route
 // All the shit between brackets are attributes of the props object
-function MeetingOverview({ match, meeting, isMeetingPending, meetingError, onMeetingRequest, onMeetingChange }) {
+function MeetingOverview({ match, serverResponse, isMeetingPending, meetingError, onMeetingRequest, onMeetingChange }) {
     useEffect(() => {
         console.log(`meeting name: ${match.params.meetingName}`);
         onMeetingRequest(match.params.meetingName);
@@ -41,13 +41,11 @@ function MeetingOverview({ match, meeting, isMeetingPending, meetingError, onMee
     return (
         <div className="MeetingOverview">
             {isMeetingPending ? (
-                <Spinner animation="border" role="status" variant="primary">
-                    <span className="visually-hidden">Loading...</span>
-                </Spinner>
+                <Spinner className="mx-auto" animation="border" role="status" variant="primary" />
             ) : (
                 <>
                     <MeetingLink />
-                    {(meeting.progress > 0 || !_.isEmpty(meeting.meetingTopicsList)) && <MeetingProgressBar />}
+                    {(serverResponse.meeting?.progress > 0 || !_.isEmpty(serverResponse.meeting?.meetingTopicsList)) && <MeetingProgressBar />}
                     <TopicList />
                 </>
             )}

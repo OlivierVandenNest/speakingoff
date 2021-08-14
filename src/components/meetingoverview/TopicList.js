@@ -8,7 +8,7 @@ import { requestMeeting } from "../../store/actions";
 
 const mapStateToProps = (state) => {
     return {
-        meeting: state.requestMeeting.meeting
+        serverResponse: state.requestMeeting.meeting
     };
 };
 
@@ -20,7 +20,7 @@ const mapDispatchToProps = (dispatch) => {
     };
 };
 
-const TopicList = ({ meeting, onReloadMeeting }) => {
+const TopicList = ({ serverResponse, onReloadMeeting }) => {
     const [creatingTopic, setCreatingTopic] = useState(false);
 
     const createTopic = (event) => {
@@ -30,15 +30,15 @@ const TopicList = ({ meeting, onReloadMeeting }) => {
     return (
         <div className="px-5 meeting-details">
             <div>
-                {meeting.meetingTopicsList?.map((topic) => {
-                    return <TopicDetail key={topic.topicId} topicName={topic.topicName} duration={topic.duration} progress={0} />;
+                {serverResponse.meeting?.meetingTopicsList?.map((topic) => {
+                    return <TopicDetail key={topic.topicId} topicInputDTO={topic.topicInputDTO} />;
                 })}
             </div>
             {creatingTopic && <TopicForm />}
             <Button className="mt-5 button" variant="white" onClick={createTopic}>
                 <img className="add-button-image" src={addButton} alt="add"></img>
             </Button>
-            <Button className="mt-5 mx-auto button" variant="info" onClick={() => onReloadMeeting(meeting.meetingName)}>
+            <Button className="mt-5 mx-auto button" variant="info" onClick={() => onReloadMeeting(serverResponse.meeting?.meetingInputDTO?.meetingName)}>
                 Reload Topics
             </Button>
         </div>

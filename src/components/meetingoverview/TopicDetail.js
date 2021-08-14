@@ -16,23 +16,22 @@ const backend = process.env.REACT_APP_BACKEND;
 
 const mapStateToProps = (state) => {
     return {
-        meeting: state.requestMeeting.meeting,
+        serverResponse: state.requestMeeting.meeting,
         isMeetingPending: state.requestMeeting.isMeetingPending
     };
 };
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        onMeetingRequest: (meetingName) => {
+        onMeetingChange: (meetingName) => {
             dispatch(requestMeeting(meetingName));
         }
     };
 };
 
-const TopicDetail = ({ topicName, duration, progress, meeting, isMeetingPending, onMeetingRequest }) => {
+const TopicDetail = ({ topicInputDTO, serverResponse, isMeetingPending, onMeetingChange }) => {
     const [clicked, setClicked] = useState(false);
-    const [topic, setTopic] = useState(meeting.meetingTopicsMap.get(topicName).topicInputDTO);
-    const [finished, setFinished] = useState(topic.isFinished);
+    const [finished, setFinished] = useState(topicInputDTO.isFinished);
 
     const handleToggle = (e) => {
         e.stopPropagation();
@@ -42,73 +41,36 @@ const TopicDetail = ({ topicName, duration, progress, meeting, isMeetingPending,
     const handleFinish = (e) => {
         e.stopPropagation();
         setFinished(!finished);
-        updateFinishedTopic(topic);
+        updateFinishedTopic(topicInputDTO);
     };
 
     const updateFinishedTopic = (topic) => {
-        topic.isFinished = !topic.isFinished;
+        topicInputDTO.isFinished = !topicInputDTO.isFinished;
         fetch(`${backend}/meetings/updatetopic`, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify(topic)
+            body: JSON.stringify(topicInputDTO)
         })
-            .then(() => onMeetingRequest(meeting.meetingName))
+            .then(() => onMeetingChange(serverResponse.meeting.meetingInputDTO.meetingName))
             .catch((err) => console.log(`error when updating finished topic: ${err}`));
     };
 
-    // const checkEnabled = (topicName) => {
-    //     let before = true;
-    //     for (let topic in topics) {
-    //         if (before) {
-    //             if (topics[topic].topicName === topicName) {
-    //                 before = false;
-    //             } else {
-    //                 if (!topics[topic].isFinished) {
-    //                     return true;
-    //                 }
-    //             }
-    //         } else {
-    //             if (topics[topic].isFinished) {
-    //                 return true;
-    //             }
-    //         }
-    //     }
-    //     return false;
-    // };
-
     return (
-        <div className={`mt-4 p-3 block-example border border-info rounded mb-0 ${topic.isFinished ? "topicfinished" : ""}`} onClick={handleToggle}>
+        <div className={`mt-4 p-3 block-example border border-info rounded mb-0 ${finished ? "topicfinished" : ""}`} onClick={handleToggle}>
             <div className="meeting-detail-top">
                 <div className="meeting-detail-title">
-                    <h2>{topicName}</h2>
-                    {clicked && <h3 className="ml-3 font-weight-light">{duration}</h3>}
+                    <h2>{topicInputDTO.topicName}</h2>
+                    {clicked && <h3 className="ml-3 font-weight-light">{topicInputDTO.duration}</h3>}
                 </div>
-                {/* {clicked && (
-                    <Button className="meeting-detail-rightgroup mr-2" variant="info">
-                        Add Tag
-                    </Button>
-                )}
-                {clicked && (
-                    <Button className="mr-2" variant="outline-info">
-                        Remove Tag
-                    </Button>
-                )} */}
-                {/* When tag buttons are uncommented, use className={`button ${clicked ? "" : "meeting-detail-rightgroup"}`} */}
-                <Button className={`button ${clicked ? "meeting-detail-rightgroup" : "meeting-detail-rightgroup"}`} variant="white">
+                <Button className="meeting-detail-rightgroup" variant="white">
                     <img src={clicked ? collapse : expand} alt="expand" className="expandcollapseimg" />
                 </Button>
             </div>
             {clicked && (
                 <div className="mt-3 meeting-detail-mid">
-                    <ProgressBar className="meeting-detail-progressbar" animated now={finished ? 100 : progress} variant="info" />
-                    {/* <div className="meeting-detail-invitees">
-                        <MeetingInvitee />
-                        <MeetingInvitee />
-                        <MeetingInvitee />
-                        <MeetingInvitee />
-                    </div> */}
+                    <ProgressBar className="meeting-detail-progressbar" animated now={finished ? 100 : 0} variant="info" />
                 </div>
             )}
             {clicked && (
@@ -121,11 +83,9 @@ const TopicDetail = ({ topicName, duration, progress, meeting, isMeetingPending,
                     <div className="ml-auto mr-3 finishbox">
                         <h5 className="font-weight-bolder my-auto">{finished ? "FINISHED" : "FINISH"}</h5>
                         {isMeetingPending ? (
-                            <Spinner animation="border" role="status" variant="primary">
-                                <span className="visually-hidden">Loading...</span>
-                            </Spinner>
+                            <Spinner animation="border" role="status" variant="primary" />
                         ) : (
-                            <Button className="button" type="checkbox" variant="white" onClick={handleFinish}>
+                            <Button className="button" type="checkbox" variant="white" onClick={handleFinish} disabled={isMeetingPending}>
                                 <img src={finished ? circlechecked : circle} alt="finish" className="finishtopicsvg" />
                             </Button>
                         )}
