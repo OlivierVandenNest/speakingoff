@@ -65,7 +65,7 @@ const TopicDetail = ({ topicInputDTO, serverResponse, isMeetingPending, onMeetin
                     <h2>{topicInputDTO.topicName}</h2>
                     {clicked && <h3 className="ml-3 font-weight-light">{topicInputDTO.duration}</h3>}
                 </div>
-                <Button className="meeting-detail-rightgroup" variant="white">
+                <Button className="meeting-detail-rightgroup button" variant="white">
                     <img src={clicked ? collapse : expand} alt="expand" className="expandcollapseimg" />
                 </Button>
             </div>

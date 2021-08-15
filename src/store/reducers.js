@@ -13,7 +13,7 @@ import {
     FINISH_MEETING_PENDING,
     FINISH_MEETING_SUCCESS,
     FINISH_MEETING_FAILED
-} from "../constants.js";
+} from "../constants";
 
 const initialMeetingState = {
     isMeetingPending: false,

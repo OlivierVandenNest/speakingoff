@@ -70,7 +70,7 @@ function MeetingOverview({
 
     return (
         <div className="MeetingOverview">
-            {serverResponse.meeting?.status === MeetingStatus.Started && (
+            {serverResponse.meeting?.status === MeetingStatus.Preparation && (
                 <div>
                     <MeetingLink />
                     <TopicList />
