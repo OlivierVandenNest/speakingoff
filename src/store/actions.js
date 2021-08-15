@@ -22,11 +22,6 @@ export const changeMeeting = (meeting) => ({
     payload: meeting
 });
 
-export const changeTopics = (topics) => ({
-    type: CHANGE_TOPICS,
-    payload: topics
-});
-
 export const requestMeeting = (meetingName) => (dispatch) => {
     dispatch({ type: REQUEST_MEETING_PENDING });
     fetch(`${backend}/meetings/${meetingName}`)

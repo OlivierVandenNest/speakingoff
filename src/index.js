@@ -5,13 +5,16 @@ import App from "./components/general/App";
 import reportWebVitals from "./reportWebVitals";
 import { Provider } from "react-redux";
 import { createStore, applyMiddleware, combineReducers } from "redux";
-import { requestMeeting, requestTopics } from "./store/reducers";
+import { requestMeeting } from "./store/reducers";
 import { createLogger } from "redux-logger";
 import thunk from "redux-thunk";
+import { composeWithDevTools } from "redux-devtools-extension";
 
-const rootReducer = combineReducers({ requestMeeting, requestTopics });
+const rootReducer = combineReducers({ requestMeeting });
 const logger = createLogger();
-const store = createStore(rootReducer, applyMiddleware(thunk, logger));
+const store = createStore(rootReducer, composeWithDevTools(applyMiddleware(thunk, logger)));
+
+// TODO: compress app when sending to client
 
 ReactDOM.render(
     <React.StrictMode>

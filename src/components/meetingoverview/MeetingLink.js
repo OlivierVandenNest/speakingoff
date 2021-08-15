@@ -5,22 +5,25 @@ import { useState } from "react";
 
 const mapStateToProps = (state) => {
     return {
-        meeting: state.requestMeeting.meeting
+        serverResponse: state.requestMeeting.meeting,
+        isMeetingPending: state.requestMeeting.isMeetingPending
     };
 };
-const MeetingLink = ({ meeting }) => {
+const MeetingLink = ({ serverResponse, isMeetingPending }) => {
     const domain = process.env.REACT_APP_DOMAIN;
     const [copied, setCopied] = useState(false);
 
     const copyLinkCallback = () => {
-        navigator.clipboard.writeText(`${domain}/meeting/${meeting.meetingName}`);
+        navigator.clipboard.writeText(`${domain}/meeting/${serverResponse.meeting.meetingInputDTO.meetingName}`);
         setCopied(true);
     };
     return (
         <div>
             <h1>Invite your co-workers!</h1>
             <div className="copylinkrow mx-auto mt-4">
-                <Alert id="linkalert" variant="info ml-auto">{`${domain}/meeting/${meeting.meetingName}`}</Alert>
+                {!isMeetingPending && (
+                    <Alert id="linkalert" variant="info ml-auto">{`${domain}/meeting/${serverResponse.meeting?.meetingInputDTO.meetingName}`}</Alert>
+                )}
                 {!copied && document.queryCommandSupported("copy") && (
                     <Button className="button mr-auto" variant="white" onClick={copyLinkCallback}>
                         <img src={copyLink} alt="copy" className="copyicon"></img>

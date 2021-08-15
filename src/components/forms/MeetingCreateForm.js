@@ -1,7 +1,6 @@
 import React from "react";
 import { Form, Button, Container, Row } from "react-bootstrap";
 import { useState } from "react";
-import { v4 as uuid_v4 } from "uuid";
 import { useHistory } from "react-router";
 
 const backend = process.env.REACT_APP_BACKEND;
@@ -9,26 +8,15 @@ const backend = process.env.REACT_APP_BACKEND;
 const MeetingCreateForm = () => {
     const history = useHistory();
     const initialState = { meetingname: "Enter meeting name" };
-    const [formValues, setFormValues] = useState(initialState);
 
     const handleCreateSubmit = (event) => {
         event.preventDefault();
-        var today = new Date();
-        var dd = String(today.getDate()).padStart(2, "0");
-        var mm = String(today.getMonth() + 1).padStart(2, "0"); //January is 0!
-        var yyyy = today.getFullYear();
-
-        today = mm + "/" + dd + "/" + yyyy;
 
         const meeting = {
-            meetingId: uuid_v4(),
-            meetingName: event.target[0].value,
-            createdDate: today,
-            meetingTopics: {},
-            status: 'preparation'
+            meetingName: event.target[0].value
         };
 
-        fetch(`${backend}/addmeeting`, {
+        fetch(`${backend}/meetings/addmeeting`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -36,7 +24,6 @@ const MeetingCreateForm = () => {
             body: JSON.stringify(meeting)
         })
             .then(() => {
-                setFormValues(initialState);
                 history.push(`/meeting/${meeting.meetingName}`);
             })
             .catch((err) => {
@@ -51,7 +38,7 @@ const MeetingCreateForm = () => {
                 <Container>
                     <Row className="justify-content-md-center">
                         <Form.Group className="mb-3" controlId="meetingname">
-                            <Form.Control type="text" placeholder={formValues.meetingname} />
+                            <Form.Control type="text" placeholder={initialState.meetingname} />
                         </Form.Group>
                     </Row>
                     <Row className="justify-content-md-center">

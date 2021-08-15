@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import { Spinner } from "react-bootstrap";
 import { connect } from "react-redux";
 import { requestMeeting, requestTopics, changeMeeting, changeTopics, startMeeting, finishMeeting } from "../../store/actions";
 import MeetingLink from "./MeetingLink";
@@ -6,15 +7,13 @@ import TopicList from "./TopicList.js";
 import MeetingProgressBar from "./MeetingProgressBar";
 import _ from "lodash";
 import Button from "react-bootstrap/Button";
+import { MeetingStatus } from "../../constants";
 
 const mapStateToProps = (state) => {
     return {
-        meeting: state.requestMeeting.meeting,
+        serverResponse: state.requestMeeting.meeting,
         isMeetingPending: state.requestMeeting.isMeetingPending,
-        meetingError: state.requestMeeting.error,
-        topics: state.requestTopics.topics,
-        areTopicsPending: state.requestTopics.areTopicsPending,
-        topicsError: state.requestTopics.topicsError
+        meetingError: state.requestMeeting.error
     };
 };
 
@@ -23,29 +22,23 @@ const mapDispatchToProps = (dispatch) => {
         onMeetingRequest: (meetingName) => {
             dispatch(requestMeeting(meetingName));
         },
-        onTopicsRequest: (meetingName) => {
-            dispatch(requestTopics(meetingName));
-        },
         onMeetingChange: (meeting) => {
             dispatch(changeMeeting(meeting));
         },
-        onTopicsChange: (topics) => {
-            dispatch(changeTopics(topics));
-        },
         onMeetingStart: (meetingName) => {
-        	dispatch(startMeeting(meetingName));
+            dispatch(startMeeting(meetingName));
         },
         onMeetingFinish: (meetingName) => {
-        	dispatch(finishMeeting(meetingName));
+            dispatch(finishMeeting(meetingName));
         }
     };
 };
 
-// Access to match object since the MeetingOverview React component is used in a Route
+// Access to 'match' object since the MeetingOverview React component is used in a Route
 // All the shit between brackets are attributes of the props object
 function MeetingOverview({
     match,
-    meeting,
+    serverResponse,
     isMeetingPending,
     meetingError,
     onMeetingRequest,
@@ -61,53 +54,53 @@ function MeetingOverview({
     useEffect(() => {
         console.log(`meeting name: ${match.params.meetingName}`);
         onMeetingRequest(match.params.meetingName);
-        onTopicsRequest(match.params.meetingName);
         return () => {
             console.log("leaving meeting overview");
             onMeetingChange({});
-            onTopicsChange({});
         };
     }, []);
-    
+
     const handleStart = (e) => {
-    	onMeetingStart(meeting.meetingName);
+        onMeetingStart(serverResponse.meeting?.meetingInputDTO?.meetingName);
     };
-    
+
     const handleFinish = (e) => {
-    	onMeetingFinish(meeting.meetingName);
+        onMeetingFinish(serverResponse.meeting?.meetingInputDTO?.meetingName);
     };
 
     return (
         <div className="MeetingOverview">
-            {meeting.status === 'preparation' && (
-            	<div>
-		        	<MeetingLink />
-		        	<TopicList />
-		        	<div className="meeting-start">
-				        <Button className="mt-5 mx-auto button" variant="info" onClick={handleStart}>
-				            Start Meeting!
-				        </Button>
-				    </div>
-				</div>
+            {serverResponse.meeting?.status === MeetingStatus.Started && (
+                <div>
+                    <MeetingLink />
+                    <TopicList />
+                    <div className="meeting-start">
+                        <Button className="mt-5 mx-auto button" variant="info" onClick={handleStart}>
+                            Start Meeting!
+                        </Button>
+                    </div>
+                </div>
             )}
-            {meeting.status === 'started' && (
-            	<div>
-            		<MeetingLink />
-		        	<div>
-		        		{(meeting.progress > 0 || !_.isEmpty(meeting.meetingTopics)) && <MeetingProgressBar />}
-		        	</div>
-		        	<TopicList />
-			    	<div className="meeting-finish">
-					    <Button className="mt-5 mx-auto button" variant="info" onClick={handleFinish}>
-					        End Meeting!
-					    </Button>
-					</div>
-				</div>
+            {serverResponse.meeting?.status === MeetingStatus.Started && (
+                <div>
+                    {isMeetingPending ? (
+                        <Spinner className="mx-auto" animation="border" role="status" variant="primary" />
+                    ) : (
+                        <>
+                            <MeetingLink />
+                            {(serverResponse.meeting?.progress > 0 || !_.isEmpty(serverResponse.meeting?.meetingTopicsList)) && <MeetingProgressBar />}
+                            <TopicList />
+                        </>
+                    )}
+                    <div className="meeting-finish">
+                        <Button className="mt-5 mx-auto button" variant="info" onClick={handleFinish}>
+                            End Meeting!
+                        </Button>
+                    </div>
+                </div>
             )}
-            {meeting.status === 'finished' && (
-            	<div>
-            		This meeting has ended. In the future, there will be an option to download the meeting report here.
-            	</div>
+            {serverResponse.meeting?.status === MeetingStatus.Finished && (
+                <div>This meeting has ended. In the future, there will be an option to download the meeting report here.</div>
             )}
         </div>
     );

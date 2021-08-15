@@ -2,35 +2,27 @@ import TopicDetail from "./TopicDetail";
 import addButton from "../../assets/add_rounded_corners.svg";
 import Button from "react-bootstrap/Button";
 import TopicForm from "../forms/TopicForm";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { connect } from "react-redux";
-import { requestTopics } from "../../store/actions.js";
+import { requestMeeting } from "../../store/actions";
+import { MeetingStatus } from "../../constants";
 
 const mapStateToProps = (state) => {
     return {
-        meeting: state.requestMeeting.meeting,
-        meetingTopics: state.requestTopics.topics
+        serverResponse: state.requestMeeting.meeting
     };
 };
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        onReloadTopics: (meetingName) => {
-            dispatch(requestTopics(meetingName));
+        onReloadMeeting: (meetingName) => {
+            dispatch(requestMeeting(meetingName));
         }
     };
 };
 
-const TopicList = ({ meeting, meetingTopics, onReloadTopics }) => {
-    // State specific to this component
+const TopicList = ({ serverResponse, onReloadMeeting }) => {
     const [creatingTopic, setCreatingTopic] = useState(false);
-    const [topicList, setTopicList] = useState([]);
-
-    useEffect(() => {
-        var newTopicList = [];
-        Object.values(meetingTopics).forEach((topic) => newTopicList.push(topic));
-        setTopicList(newTopicList);
-    }, [meetingTopics]);
 
     const createTopic = (event) => {
         setCreatingTopic(!creatingTopic);
@@ -39,16 +31,16 @@ const TopicList = ({ meeting, meetingTopics, onReloadTopics }) => {
     return (
         <div className="px-5 meeting-details">
             <div>
-                {topicList.map((topic) => {
-                    return <TopicDetail key={topic.topicId} topicName={topic.topicName} duration={topic.duration} progress={0} />;
+                {serverResponse.meeting?.meetingTopicsList?.map((topic) => {
+                    return <TopicDetail key={topic.topicId} topicInputDTO={topic.topicInputDTO} />;
                 })}
             </div>
             {creatingTopic && <TopicForm />}
-            {meeting.status === 'preparation' && (
-		        <Button className="mt-5 button" variant="white" onClick={createTopic}>
-		            <img className="add-button-image" src={addButton} alt="add"></img>
-		        </Button>
-		    )}
+            {serverResponse.meeting?.status === MeetingStatus.Preparation && (
+                <Button className="mt-5 button" variant="white" onClick={createTopic}>
+                    <img className="add-button-image" src={addButton} alt="add"></img>
+                </Button>
+            )}
         </div>
     );
 };

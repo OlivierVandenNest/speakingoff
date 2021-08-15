@@ -12,19 +12,13 @@ import {
     START_MEETING_FAILED,
     FINISH_MEETING_PENDING,
     FINISH_MEETING_SUCCESS,
-    FINISH_MEETING_FAILED 
+    FINISH_MEETING_FAILED
 } from "../constants.js";
 
 const initialMeetingState = {
     isMeetingPending: false,
     meetingError: "",
     meeting: {}
-};
-
-const initialTopicsState = {
-    areTopicsPending: false,
-    topicsError: "",
-    topics: {}
 };
 
 export const requestMeeting = (state = initialMeetingState, action = {}) => {
@@ -40,30 +34,15 @@ export const requestMeeting = (state = initialMeetingState, action = {}) => {
         case START_MEETING_PENDING:
             return { ...state };
         case START_MEETING_SUCCESS:
-            return { ...state, meeting: action.payload};
+            return { ...state, meeting: action.payload };
         case START_MEETING_FAILED:
-            return { ...state, meetingError: action.payload};
+            return { ...state, meetingError: action.payload };
         case FINISH_MEETING_PENDING:
             return { ...state };
         case FINISH_MEETING_SUCCESS:
-            return { ...state, meeting: action.payload};
+            return { ...state, meeting: action.payload };
         case FINISH_MEETING_FAILED:
-            return { ...state, meetingError: action.payload};
-        default:
-            return state;
-    }
-};
-
-export const requestTopics = (state = initialTopicsState, action = {}) => {
-    switch (action.type) {
-        case REQUEST_TOPICS_PENDING:
-            return { ...state, areTopicsPending: true };
-        case REQUEST_TOPICS_SUCCESS:
-            return { ...state, topics: action.payload, areTopicsPending: false };
-        case REQUEST_TOPICS_FAILED:
-            return { ...state, topicsError: action.payload, areTopicsPending: false };
-        case CHANGE_TOPICS:
-            return { ...state, topics: action.payload };
+            return { ...state, meetingError: action.payload };
         default:
             return state;
     }
