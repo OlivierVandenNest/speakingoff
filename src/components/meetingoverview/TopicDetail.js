@@ -7,6 +7,7 @@ import circle from "../../assets/circle.svg";
 import circlechecked from "../../assets/circlechecked.svg";
 import expand from "../../assets/expand_rounded.svg";
 import collapse from "../../assets/collapse_rounded.svg";
+import { MeetingStatus } from "../../constants";
 
 import { useState } from "react";
 import { connect } from "react-redux";
@@ -68,12 +69,12 @@ const TopicDetail = ({ topicInputDTO, serverResponse, isMeetingPending, onMeetin
                     <img src={clicked ? collapse : expand} alt="expand" className="expandcollapseimg" />
                 </Button>
             </div>
-            {clicked && (
+            {clicked && serverResponse.meeting?.status === MeetingStatus.Started && (
                 <div className="mt-3 meeting-detail-mid">
                     <ProgressBar className="meeting-detail-progressbar" animated now={finished ? 100 : 0} variant="info" />
                 </div>
             )}
-            {clicked && (
+            {clicked && serverResponse.meeting?.status === MeetingStatus.Started && (
                 <div className="mt-3 meeting-detail-bottom">
                     <h5 className="font-weight-bolder">ADD CONCLUSION:</h5>
                     <div className="ml-3 action-imgs">

@@ -5,6 +5,7 @@ import TopicForm from "../forms/TopicForm";
 import { useState } from "react";
 import { connect } from "react-redux";
 import { requestMeeting } from "../../store/actions";
+import { MeetingStatus } from "../../constants";
 
 const mapStateToProps = (state) => {
     return {
@@ -35,12 +36,11 @@ const TopicList = ({ serverResponse, onReloadMeeting }) => {
                 })}
             </div>
             {creatingTopic && <TopicForm />}
-            <Button className="mt-5 button" variant="white" onClick={createTopic}>
-                <img className="add-button-image" src={addButton} alt="add"></img>
-            </Button>
-            <Button className="mt-5 mx-auto button" variant="info" onClick={() => onReloadMeeting(serverResponse.meeting?.meetingInputDTO?.meetingName)}>
-                Reload Topics
-            </Button>
+            {serverResponse.meeting?.status === MeetingStatus.Preparation && (
+                <Button className="mt-5 button" variant="white" onClick={createTopic}>
+                    <img className="add-button-image" src={addButton} alt="add"></img>
+                </Button>
+            )}
         </div>
     );
 };
