@@ -1,7 +1,8 @@
-import { Button, ProgressBar } from "react-bootstrap";
+import { Button, ProgressBar, InputGroup, FormControl, Form } from "react-bootstrap";
 import Spinner from "react-bootstrap/Spinner";
 import MeetingInvitee from "./MeetingInvitee";
 import micLogo from "../../assets/mic_logo.png";
+import addConclusionLogo from "../../assets/add_conclusion.svg";
 import textLogo from "../../assets/text-logo.png";
 import circle from "../../assets/circle.svg";
 import circlechecked from "../../assets/circlechecked.svg";
@@ -33,6 +34,7 @@ const mapDispatchToProps = (dispatch) => {
 const TopicDetail = ({ topicInputDTO, serverResponse, isMeetingPending, onMeetingChange }) => {
     const [clicked, setClicked] = useState(false);
     const [finished, setFinished] = useState(topicInputDTO.isFinished);
+    const [isWritingConclusion, setIsWritingConclusion] = useState(false);
 
     const handleToggle = (e) => {
         e.stopPropagation();
@@ -42,11 +44,22 @@ const TopicDetail = ({ topicInputDTO, serverResponse, isMeetingPending, onMeetin
     const handleFinish = (e) => {
         e.stopPropagation();
         setFinished(!finished);
-        updateFinishedTopic(topicInputDTO);
+        topicInputDTO.isFinished = !topicInputDTO.isFinished;
+        updateTopic(topicInputDTO);
     };
 
-    const updateFinishedTopic = (topic) => {
-        topicInputDTO.isFinished = !topicInputDTO.isFinished;
+    const handleConclusion = (e) => {
+        e.stopPropagation();
+        setIsWritingConclusion(true);
+    };
+
+    const handleWrittenConclusion = (e) => {
+        e.preventDefault();
+        topicInputDTO.description = e.target[0].value;
+        updateTopic(topicInputDTO);
+    };
+
+    const updateTopic = (topic) => {
         fetch(`${backend}/meetings/updatetopic`, {
             method: "PUT",
             headers: {
@@ -55,17 +68,17 @@ const TopicDetail = ({ topicInputDTO, serverResponse, isMeetingPending, onMeetin
             body: JSON.stringify(topicInputDTO)
         })
             .then(() => onMeetingChange(serverResponse.meeting.meetingInputDTO.meetingName))
-            .catch((err) => console.log(`error when updating finished topic: ${err}`));
+            .catch((err) => console.log(`error when updating topic: ${err}`));
     };
 
     return (
-        <div className={`mt-4 p-3 block-example border border-info rounded mb-0 ${finished ? "topicfinished" : ""}`} onClick={handleToggle}>
+        <div className={`mt-4 p-3 block-example border border-info rounded mb-0 ${finished ? "topicfinished" : ""}`}>
             <div className="meeting-detail-top">
                 <div className="meeting-detail-title">
                     <h2>{topicInputDTO.topicName}</h2>
                     {clicked && <h3 className="ml-3 font-weight-light">{topicInputDTO.duration}</h3>}
                 </div>
-                <Button className="meeting-detail-rightgroup button" variant="white">
+                <Button className="meeting-detail-rightgroup button" variant="white" onClick={handleToggle}>
                     <img src={clicked ? collapse : expand} alt="expand" className="expandcollapseimg" />
                 </Button>
             </div>
@@ -76,11 +89,25 @@ const TopicDetail = ({ topicInputDTO, serverResponse, isMeetingPending, onMeetin
             )}
             {clicked && serverResponse.meeting?.status === MeetingStatus.Started && (
                 <div className="mt-3 meeting-detail-bottom">
-                    <h5 className="font-weight-bolder">ADD CONCLUSION:</h5>
-                    <div className="ml-3 action-imgs">
-                        <img src={micLogo} alt="mic" />
-                        <img className="ml-3" src={textLogo} alt="text" />
-                    </div>
+                    {isWritingConclusion ? (
+                        <div className="add-conclusion-box">
+                            <Form onSubmit={handleWrittenConclusion}>
+                                <InputGroup>
+                                    <FormControl as="textarea" aria-label="Topic Conclusion" />
+                                    <Button className="ml-2" variant="info" type="submit">
+                                        Add Conclusion
+                                    </Button>
+                                </InputGroup>
+                            </Form>
+                        </div>
+                    ) : (
+                        <div className="action-imgs">
+                            {/* <img src={micLogo} alt="mic" /> */}
+                            <Button className="button" type="button" variant="white" onClick={handleConclusion} disabled={isMeetingPending}>
+                                <img src={addConclusionLogo} alt="conclusion" />
+                            </Button>
+                        </div>
+                    )}
                     <div className="ml-auto mr-3 finishbox">
                         <h5 className="font-weight-bolder my-auto">{finished ? "FINISHED" : "FINISH"}</h5>
                         {isMeetingPending ? (

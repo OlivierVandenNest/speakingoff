@@ -1,11 +1,12 @@
 import { Navbar, Nav, Button } from "react-bootstrap";
+import fullLogo from "../../assets/full_logo.svg";
 
 const NavigationBar = () => {
     return (
         <>
             <Navbar className="mb-5 py-3" bg="light">
                 <Navbar.Brand className="ml-4" href="/">
-                    SPEAKINGOFF
+                    <img src={fullLogo} alt="speakingoff"></img>
                 </Navbar.Brand>
                 <Nav className="ml-auto">
                     <Nav.Link href="/about">ABOUT</Nav.Link>

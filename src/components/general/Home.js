@@ -19,7 +19,7 @@ const Home = () => {
 
     return (
         <div>
-            <h1 className="mb-5">SpeakingOff</h1>
+            <h1 className="mb-5">Get Started!</h1>
             <div className="homeactionlist">
                 {!creatingMeeting && (
                     <Button className="mt-5 mx-auto button" variant="info" onClick={createClicked}>
