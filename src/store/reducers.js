@@ -12,7 +12,9 @@ import {
     START_MEETING_FAILED,
     FINISH_MEETING_PENDING,
     FINISH_MEETING_SUCCESS,
-    FINISH_MEETING_FAILED
+    FINISH_MEETING_FAILED,
+    ADD_TOPIC,
+    TOGGLE_TOPIC
 } from "../constants";
 
 const initialMeetingState = {
@@ -43,6 +45,48 @@ export const requestMeeting = (state = initialMeetingState, action = {}) => {
             return { ...state, meeting: action.payload };
         case FINISH_MEETING_FAILED:
             return { ...state, meetingError: action.payload };
+        default:
+            return state;
+    }
+};
+
+export const topicToggleReducer = (state = { topics: [] }, action) => {
+    switch (action.type) {
+        case ADD_TOPIC: {
+            if (
+                state.topics.filter((topicToggleState) => {
+                    return topicToggleState.meetingName === action.meeting && topicToggleState.topicName === action.topic;
+                }).length === 0
+            ) {
+                return {
+                    ...state,
+                    topics: [
+                        ...state.topics,
+                        {
+                            meetingName: action.meeting,
+                            topicName: action.topic,
+                            toggled: false
+                        }
+                    ]
+                };
+            } else {
+                return state;
+            }
+        }
+        case TOGGLE_TOPIC: {
+            return {
+                ...state,
+                topics: state.topics?.map((topic) => {
+                    if (topic.topicName !== action.topic) {
+                        return topic;
+                    }
+                    return {
+                        ...topic,
+                        toggled: !topic.toggled
+                    };
+                })
+            };
+        }
         default:
             return state;
     }

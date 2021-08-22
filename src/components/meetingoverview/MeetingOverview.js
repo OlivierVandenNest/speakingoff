@@ -8,6 +8,8 @@ import MeetingProgressBar from "./MeetingProgressBar";
 import _ from "lodash";
 import Button from "react-bootstrap/Button";
 import { MeetingStatus } from "../../constants";
+import { useHistory } from "react-router";
+import "./meetingoverview.scss";
 
 const mapStateToProps = (state) => {
     return {
@@ -60,12 +62,15 @@ function MeetingOverview({
         };
     }, []);
 
+    const history = useHistory();
+
     const handleStart = (e) => {
         onMeetingStart(serverResponse.meeting?.meetingInputDTO?.meetingName);
     };
 
     const handleFinish = (e) => {
         onMeetingFinish(serverResponse.meeting?.meetingInputDTO?.meetingName);
+        history.push(`/meeting/${serverResponse.meeting?.meetingInputDTO?.meetingName}/report`);
     };
 
     return (
@@ -74,7 +79,7 @@ function MeetingOverview({
                 <div>
                     <MeetingLink />
                     <TopicList />
-                    <div className="meeting-start">
+                    <div className="flex-row">
                         <Button className="mt-5 mx-auto button" variant="info" onClick={handleStart}>
                             Start Meeting!
                         </Button>
@@ -84,7 +89,7 @@ function MeetingOverview({
             {serverResponse.meeting?.status === MeetingStatus.Started && (
                 <div>
                     {isMeetingPending ? (
-                        <Spinner className="mx-auto" animation="border" role="status" variant="primary" />
+                        <Spinner className="mx-auto" animation="border" role="status" variant="info" />
                     ) : (
                         <>
                             <MeetingLink />
@@ -92,15 +97,12 @@ function MeetingOverview({
                             <TopicList />
                         </>
                     )}
-                    <div className="meeting-finish">
+                    <div className="flex-row">
                         <Button className="mt-5 mx-auto button" variant="info" onClick={handleFinish}>
                             End Meeting!
                         </Button>
                     </div>
                 </div>
-            )}
-            {serverResponse.meeting?.status === MeetingStatus.Finished && (
-                <div>This meeting has ended. In the future, there will be an option to download the meeting report here.</div>
             )}
         </div>
     );

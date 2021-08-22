@@ -2,6 +2,7 @@ import { Alert, Button } from "react-bootstrap";
 import { connect } from "react-redux";
 import copyLink from "../../assets/copylink.svg";
 import { useState } from "react";
+import "./meetingoverview.scss";
 
 const mapStateToProps = (state) => {
     return {
@@ -19,8 +20,8 @@ const MeetingLink = ({ serverResponse, isMeetingPending }) => {
     };
     return (
         <div>
-            <h1>Invite your co-workers!</h1>
-            <div className="copylinkrow mx-auto mt-4">
+            <h1 className="text-align-center">Invite your co-workers!</h1>
+            <div className="flex-row themecolor mx-auto mt-4">
                 {!isMeetingPending && (
                     <Alert id="linkalert" variant="info ml-auto">{`${domain}/meeting/${serverResponse.meeting?.meetingInputDTO.meetingName}`}</Alert>
                 )}

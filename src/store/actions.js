@@ -12,7 +12,9 @@ import {
     START_MEETING_FAILED,
     FINISH_MEETING_PENDING,
     FINISH_MEETING_SUCCESS,
-    FINISH_MEETING_FAILED
+    FINISH_MEETING_FAILED,
+    TOGGLE_TOPIC,
+    ADD_TOPIC
 } from "../constants";
 
 const backend = process.env.REACT_APP_BACKEND;
@@ -26,7 +28,12 @@ export const requestMeeting = (meetingName) => (dispatch) => {
     dispatch({ type: REQUEST_MEETING_PENDING });
     fetch(`${backend}/meetings/${meetingName}`)
         .then((data) => data.json())
-        .then((meeting) => dispatch({ type: REQUEST_MEETING_SUCCESS, payload: meeting }))
+        .then((meeting) => {
+            dispatch({ type: REQUEST_MEETING_SUCCESS, payload: meeting });
+            for (const t of meeting.meeting.meetingTopicsList) {
+                dispatch({ type: ADD_TOPIC, meeting: t.topicInputDTO.meetingName, topic: t.topicInputDTO.topicName });
+            }
+        })
         .catch((err) => dispatch({ type: REQUEST_MEETING_FAILED, payload: err }));
 };
 
@@ -52,4 +59,12 @@ export const finishMeeting = (meetingName) => (dispatch) => {
         .then((data) => data.json())
         .then((meeting) => dispatch({ type: FINISH_MEETING_SUCCESS, payload: meeting }))
         .catch((err) => dispatch({ type: FINISH_MEETING_FAILED, payload: err }));
+};
+
+export const addTopic = (meetingName, topicName) => (dispatch) => {
+    dispatch({ type: ADD_TOPIC, meeting: meetingName, topic: topicName });
+};
+
+export const toggleTopic = (meetingName, topicName) => (dispatch) => {
+    dispatch({ type: TOGGLE_TOPIC, meeting: meetingName, topic: topicName });
 };

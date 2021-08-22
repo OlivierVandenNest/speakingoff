@@ -19,8 +19,8 @@ const Home = () => {
 
     return (
         <div>
-            <h1 className="mb-5">Get Started!</h1>
-            <div className="homeactionlist">
+            <h1 className="text-align-center mb-5">Get Started!</h1>
+            <div className="flex-column">
                 {!creatingMeeting && (
                     <Button className="mt-5 mx-auto button" variant="info" onClick={createClicked}>
                         Create Meeting

@@ -1,4 +1,5 @@
 import MeetingOverview from "../meetingoverview/MeetingOverview";
+import MeetingReport from "../meetingreport/MeetingReport";
 import Home from "./Home";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import NavigationBar from "./NavigationBar";
@@ -15,7 +16,8 @@ const App = () => {
                 <NavigationBar />
                 <Switch>
                     <Route path="/" exact component={Home} />
-                    <Route path="/meeting/:meetingName" component={MeetingOverview} />
+                    <Route path="/meeting/:meetingName" exact component={MeetingOverview} />
+                    <Route path="/meeting/:meetingName/report" component={MeetingReport} />
                 </Switch>
             </div>
         </Router>

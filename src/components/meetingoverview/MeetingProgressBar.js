@@ -1,5 +1,6 @@
 import ProgressBar from "react-bootstrap/ProgressBar";
 import { connect } from "react-redux";
+import "./meetingoverview.scss";
 
 const mapStateToProps = (state) => {
     return {
@@ -11,7 +12,7 @@ const MeetingProgressBar = ({ serverResponse }) => {
     return (
         <div className="mt-5 mb-5 px-5">
             <ProgressBar animated now={serverResponse.meeting?.progress * 100} variant="info"></ProgressBar>
-            <div className="mt-3 meeting-progress-bar">
+            <div className="mt-3 flex-row space-around">
                 {serverResponse.meeting?.meetingTopicsList.map((topic) => {
                     return (
                         <div key={topic.topicId}>

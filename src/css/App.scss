@@ -1,122 +1,41 @@
-h1 {
+.text-align-center {
     text-align: center;
 }
 
-.meeting-progress-bar {
+.flex-row {
     display: flex;
     flex-direction: row;
-    justify-content: space-around;
 }
 
-.dot {
-    height: 33px;
-    width: 33px;
-    border-radius: 50%;
-    display: inline-block;
-}
-
-.meeting-detail-top {
-    display: flex;
-}
-
-.meeting-detail-title {
-    display: flex;
-}
-
-.meeting-detail-rightgroup {
-    margin-left: auto;
-}
-
-.meeting-detail-mid {
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-}
-
-.meeting-detail-progressbar,
-.add-conclusion-box {
-    width: 50%;
-}
-
-.meeting-detail-invitees {
-    width: 10%;
-    display: flex;
-    justify-content: space-between;
-}
-
-.meeting-detail-bottom {
-    display: flex;
-}
-
-.meeting-details {
+.flex-column {
     display: flex;
     flex-direction: column;
 }
 
-.action-imgs > button > img {
-    height: 25px;
+.space-around {
+    justify-content: space-around;
 }
 
-.add-button-image {
-    height: 70px;
+.space-between {
+    justify-content: space-between;
+}
+
+.w100 {
+    width: 100%;
+}
+
+.w50 {
+    width: 50%;
 }
 
 .button {
     box-shadow: none !important;
 }
 
-.homeactionlist {
-    display: flex;
-    flex-direction: column;
-}
-
-.copyicon {
-    width: 24px;
-}
-
-.copylinkrow {
-    display: flex;
-    color: #17a2b8;
-}
-
-.finishtopicsvg {
-    width: 24px;
-}
-
 .themecolor {
     color: #17a2b8;
 }
 
-.finishbox {
-    display: flex;
-}
-
-.topicfinished {
+.bg-secondary-color {
     background-color: #90f0ff;
-}
-
-.topicform-top {
-    display: flex;
-    flex-direction: row;
-}
-
-.duration-group {
-    display: flex;
-    flex-direction: row;
-}
-
-.topicform-bot {
-    display: flex;
-    flex-direction: row;
-}
-
-.meeting-start {
-    display: flex;
-    flex-direction: row;
-}
-
-.meeting-finish {
-    display: flex;
-    flex-direction: row;
 }

@@ -1,3 +1,5 @@
+import "./meetingoverview.scss";
+
 var randomColor = require("randomcolor");
 
 const MeetingInvitee = () => {

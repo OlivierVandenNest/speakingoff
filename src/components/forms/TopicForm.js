@@ -2,7 +2,7 @@ import React from "react";
 import { Row, Form, Button, Col } from "react-bootstrap";
 import { useState } from "react";
 import { connect } from "react-redux";
-import { requestMeeting } from "../../store/actions.js";
+import { addTopic, requestMeeting } from "../../store/actions.js";
 import expand from "../../assets/expand_rounded.svg";
 import collapse from "../../assets/collapse_rounded.svg";
 import _ from "lodash";
@@ -62,13 +62,13 @@ const TopicForm = ({ serverResponse, onMeetingChange }) => {
     return (
         <div className="mt-4 p-3 border border-info rounded mb-0">
             <Form onSubmit={handleSubmit}>
-                <div className="topicform-top mb-3">
+                <div className="flex-row mb-3">
                     {clicked && (
                         <>
                             <div>
                                 <Form.Control type="text" placeholder={initialState.topicname} />
                             </div>
-                            <div className="duration-group ml-auto">
+                            <div className="flex-row ml-auto">
                                 <h6 className="my-auto">Duration</h6>
                                 <Form.Control type="text" className="ml-2" />
                                 <h6 className="my-auto ml-2">h</h6>
@@ -77,7 +77,7 @@ const TopicForm = ({ serverResponse, onMeetingChange }) => {
                             </div>
                         </>
                     )}
-                    <Button className="button meeting-detail-rightgroup" variant="white" onClick={handleToggle}>
+                    <Button className="button ml-auto" variant="white" onClick={handleToggle}>
                         <img src={clicked ? collapse : expand} alt="expand" className="expandcollapseimg" />
                     </Button>
                 </div>
