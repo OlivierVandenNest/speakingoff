@@ -1,5 +1,6 @@
 import TopicDetail from "./TopicDetail";
 import addButton from "../../assets/add_rounded_corners.svg";
+import cancelButton from "../../assets/cancel_button.svg";
 import Button from "react-bootstrap/Button";
 import TopicForm from "../forms/TopicForm";
 import { useState } from "react";
@@ -39,7 +40,7 @@ const TopicList = ({ serverResponse, onReloadMeeting }) => {
             {creatingTopic && <TopicForm />}
             {serverResponse.meeting?.status === MeetingStatus.Preparation && (
                 <Button className="mt-5 button" variant="white" onClick={createTopic}>
-                    <img className="add-button-image" src={addButton} alt="add"></img>
+                    <img className="add-button-image" src={creatingTopic ? cancelButton : addButton} alt="add"></img>
                 </Button>
             )}
         </div>

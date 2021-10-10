@@ -12,11 +12,12 @@ const mapStateToProps = (state) => {
 };
 const MeetingLink = ({ serverResponse, isMeetingPending }) => {
     const domain = process.env.REACT_APP_DOMAIN;
-    const [copied, setCopied] = useState(false);
+    const [showCopyLink, setShowCopyLink] = useState(true);
 
     const copyLinkCallback = () => {
         navigator.clipboard.writeText(`${domain}/meeting/${serverResponse.meeting.meetingInputDTO.meetingName}`);
-        setCopied(true);
+        setShowCopyLink(false);
+        setTimeout(() => setShowCopyLink(true), 3000);
     };
     return (
         <div>
@@ -25,13 +26,13 @@ const MeetingLink = ({ serverResponse, isMeetingPending }) => {
                 {!isMeetingPending && (
                     <Alert id="linkalert" variant="info ml-auto">{`${domain}/meeting/${serverResponse.meeting?.meetingInputDTO.meetingName}`}</Alert>
                 )}
-                {!copied && document.queryCommandSupported("copy") && (
+                {showCopyLink && document.queryCommandSupported("copy") && (
                     <Button className="button mr-auto" variant="white" onClick={copyLinkCallback}>
                         <img src={copyLink} alt="copy" className="copyicon"></img>
                         <h6 className="mr-auto my-auto">Copy link</h6>
                     </Button>
                 )}
-                {copied && <h6 className="mr-auto mt-3 ml-3">Copied!</h6>}
+                {!showCopyLink && <h6 className="mr-auto mt-3 ml-3">Copied!</h6>}
             </div>
         </div>
     );

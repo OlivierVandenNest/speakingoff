@@ -43,7 +43,7 @@ const TopicDetail = ({ topicInputDTO, serverResponse, isMeetingPending, topicTog
         }).length > 0
     );
     const [finished, setFinished] = useState(topicInputDTO.isFinished);
-    const [isWritingConclusion, setIsWritingConclusion] = useState(false);
+    const [isWritingConclusion, setIsWritingConclusion] = useState(topicInputDTO.topicDescription == "");
 
     const handleToggle = (e) => {
         e.stopPropagation();
@@ -103,7 +103,7 @@ const TopicDetail = ({ topicInputDTO, serverResponse, isMeetingPending, topicTog
                         <div className="w50">
                             <Form onSubmit={handleWrittenConclusion}>
                                 <InputGroup>
-                                    <FormControl as="textarea" aria-label="Topic Conclusion" />
+                                    <FormControl as="textarea" aria-label="Topic Conclusion" defaultValue={topicInputDTO.topicDescription} />
                                     <Button className="ml-2" variant="info" type="submit">
                                         Add Conclusion
                                     </Button>
@@ -111,8 +111,10 @@ const TopicDetail = ({ topicInputDTO, serverResponse, isMeetingPending, topicTog
                             </Form>
                         </div>
                     ) : (
-                        <div className="action-imgs">
-                            {/* <img src={micLogo} alt="mic" /> */}
+                        <div className="flex-row w50">
+                            <div className="w100 block">
+                                <p className="wordwrap">{topicInputDTO.topicDescription}</p>
+                            </div>
                             <Button className="button" type="button" variant="white" onClick={handleConclusion} disabled={isMeetingPending}>
                                 <img src={addConclusionLogo} alt="conclusion" />
                             </Button>

@@ -24,8 +24,24 @@
     width: 100%;
 }
 
+.w75 {
+    width: 75%;
+}
+
 .w50 {
     width: 50%;
+}
+
+.w33 {
+    width: 33%;
+}
+
+.w10 {
+    width: 10%;
+}
+
+.mw800 {
+    max-width: 800px;
 }
 
 .button {
@@ -38,4 +54,12 @@
 
 .bg-secondary-color {
     background-color: #90f0ff;
+}
+
+.block {
+    display: block;
+}
+
+.wordwrap {
+    word-wrap: break-word;
 }

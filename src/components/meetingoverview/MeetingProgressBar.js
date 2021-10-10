@@ -10,7 +10,7 @@ const mapStateToProps = (state) => {
 
 const MeetingProgressBar = ({ serverResponse }) => {
     return (
-        <div className="mt-5 mb-5 px-5">
+        <div className="mt-5 mb-5 mx-auto px-5 w75">
             <ProgressBar animated now={serverResponse.meeting?.progress * 100} variant="info"></ProgressBar>
             <div className="mt-3 flex-row space-around">
                 {serverResponse.meeting?.meetingTopicsList.map((topic) => {

@@ -62,13 +62,13 @@ const TopicForm = ({ serverResponse, onMeetingChange }) => {
     return (
         <div className="mt-4 p-3 border border-info rounded mb-0">
             <Form onSubmit={handleSubmit}>
-                <div className="flex-row mb-3">
+                <div className="flex-row mb-3 w100">
                     {clicked && (
                         <>
-                            <div>
+                            <div className="w50">
                                 <Form.Control type="text" placeholder={initialState.topicname} />
                             </div>
-                            <div className="flex-row ml-auto">
+                            <div className="flex-row ml-auto w25">
                                 <h6 className="my-auto">Duration</h6>
                                 <Form.Control type="text" className="ml-2" />
                                 <h6 className="my-auto ml-2">h</h6>
@@ -82,16 +82,14 @@ const TopicForm = ({ serverResponse, onMeetingChange }) => {
                     </Button>
                 </div>
                 {clicked && (
-                    <Row>
-                        <Col>
+                    <div className="flex-row w100">
+                        <div className="w50">
                             <Form.Control type="text" placeholder={initialState.description} />
-                        </Col>
-                        <Col>
-                            <Button className="ms-auto" variant="info" type="submit">
-                                Add
-                            </Button>
-                        </Col>
-                    </Row>
+                        </div>
+                        <Button className="ml-3" variant="info" type="submit">
+                            Add
+                        </Button>
+                    </div>
                 )}
             </Form>
         </div>

@@ -1,6 +1,6 @@
 import { connect } from "react-redux";
-import { Spinner } from "react-bootstrap";
-import { useEffect } from "react";
+import { Button, Spinner } from "react-bootstrap";
+import { useState, useEffect } from "react";
 import { requestMeeting, changeMeeting } from "../../store/actions";
 
 const mapStateToProps = (state) => {
@@ -22,6 +22,8 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 const MeetingReport = ({ match, meeting, isMeetingPending, onMeetingRequest, onMeetingChange }) => {
+    const [showCopyReport, setShowCopyReport] = useState(true);
+
     useEffect(() => {
         console.log(`meeting name: ${match.params.meetingName}`);
         onMeetingRequest(match.params.meetingName);
@@ -31,22 +33,43 @@ const MeetingReport = ({ match, meeting, isMeetingPending, onMeetingRequest, onM
         };
     }, []);
 
+    const handleCopyReport = (event) => {
+        event.stopPropagation();
+        var clipBoardContent = `**${meeting.meeting?.meetingInputDTO.meetingName}**`;
+        clipBoardContent = meeting.meeting?.meetingTopicsList.reduce((content, topic) => {
+            let topicDescription = topic.topicInputDTO.topicDescription;
+            return `${content}\n\n${topic.topicInputDTO.topicName}${topicDescription == "" ? "" : `:\n${topicDescription}`}`;
+        }, clipBoardContent);
+        navigator.clipboard.writeText(clipBoardContent);
+        setShowCopyReport(false);
+        setTimeout(() => setShowCopyReport(true), 3000);
+    };
+
     return (
-        <div className="border-info rounded px-5 pb-5 flex-column text-align-center">
-            {isMeetingPending ? (
-                <Spinner className="mx-auto" animation="border" role="status" variant="info" />
+        <div className="text-align-center">
+            <div className="mx-auto border border-info rounded p-5 flex-column mw800">
+                {isMeetingPending ? (
+                    <Spinner className="mx-auto" animation="border" role="status" variant="info" />
+                ) : (
+                    <>
+                        <h1 className="font-weight-bold">{meeting.meeting?.meetingInputDTO.meetingName}</h1>
+                        {meeting.meeting?.meetingTopicsList.map((topic) => {
+                            return (
+                                <div className="mx-5 mt-5">
+                                    <h3 className="font-weight-bold">{topic.topicInputDTO.topicName}</h3>
+                                    <p>{topic.topicInputDTO.topicDescription}</p>
+                                </div>
+                            );
+                        })}
+                    </>
+                )}
+            </div>
+            {showCopyReport ? (
+                <Button className="mt-5" variant="info" onClick={handleCopyReport}>
+                    Copy Report
+                </Button>
             ) : (
-                <>
-                    <h1 className="font-weight-bold">{meeting.meeting?.meetingInputDTO.meetingName}</h1>
-                    {meeting.meeting?.meetingTopicsList.map((topic) => {
-                        return (
-                            <div className="mx-5 mt-5">
-                                <h3 className="font-weight-bold">{topic.topicInputDTO.topicName}</h3>
-                                <p>{topic.topicInputDTO.topicDescription}</p>
-                            </div>
-                        );
-                    })}
-                </>
+                <h6 className="themecolor mt-5">Copied to clipboard!</h6>
             )}
         </div>
     );
